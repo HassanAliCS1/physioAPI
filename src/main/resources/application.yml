@@ -1,0 +1,12 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  datasource:
+    username: postgres
+    password: Hassan12
+    url: jdbc:postgresql://localhost:5432/ums
+  jpa:
+    hibernate:
+      ddl-auto: update
