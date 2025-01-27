@@ -1,0 +1,22 @@
+jobs:
+  do-not-merge:
+    if: ${{contains(github.event.*.labels.*.name, 'do not merge')}}
+    name: Prevent Merging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label Check
+        run: |
+          echo "PR is labeled as 'Do Not Merge'."
+          echo "Failing this PR to prevent merging."
+          exit 1
+
+name: DO NOT MERGE
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - opened
+      - reopened
+      - synchronize
+      - unlabeled
