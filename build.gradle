@@ -26,13 +26,16 @@ repositories {
 }
 
 jacoco {
-	toolVersion = "0.8.11"
+	toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
-	dependsOn test // tests are required to run before generating the report
+	dependsOn test
 	reports {
 		xml.required = true
+		csv.required = false
+		html.required = true
+		html.outputLocation = layout.buildDirectory.dir("jacocoHtml").get().asFile
 	}
 }
 
