@@ -4,9 +4,9 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-    username: postgres
-    password: ${LOCAL_DB_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/ums
+    username: ${secrets.DB_USERNAME}
+    password: ${secrets.DB_PASSWORD}
+    url: ${secrets.DB_URL}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
