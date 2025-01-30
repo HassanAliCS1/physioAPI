@@ -1,0 +1,13 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  datasource:
+    username: ${secrets.DB_USERNAME}
+    password: ${secrets.DB_PASSWORD}
+    url: ${secrets.DB_URL}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
