@@ -4,9 +4,9 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-    username: ${secrets.DB_USERNAME}
-    password: ${secrets.DB_PASSWORD}
-    url: ${secrets.DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

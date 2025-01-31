@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: ${{secrets.SONAR_PROJECT_KEY}}
-          secrets.DB_URL: ${{secrets.DB_URL}}
-          secrets.DB_USERNAME: ${{secrets.DB_USERNAME}}
-          secrets.DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          DB_URL: ${{secrets.DB_URL}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
         run: ./gradlew build jacocoTestReport sonar --info
