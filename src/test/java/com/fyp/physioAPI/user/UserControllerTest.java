@@ -107,4 +107,30 @@ class UserControllerTest {
                 .expectBody(String.class)
                 .isEqualTo("User does not exist");
     }
+
+    @Test
+    void testUpdateUserSuccess() {
+        when(userService.updateUser(any(UserModel.class))).thenReturn(Mono.empty());
+
+        webTestClient.post()
+                .uri("/api/auth/update")
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .isEqualTo("User updated successfully");
+    }
+
+    @Test
+    void testUpdateUserFailure() {
+        when(userService.updateUser(any(UserModel.class))).thenReturn(Mono.error(new AuthException("User does not exist")));
+
+        webTestClient.post()
+                .uri("/api/auth/update")
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(String.class)
+                .isEqualTo("User does not exist");
+    }
 }
