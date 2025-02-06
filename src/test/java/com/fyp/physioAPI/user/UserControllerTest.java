@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.*;
 
 @WebFluxTest(UserController.class)
-public class UserControllerTest {
+class UserControllerTest {
 
     private WebTestClient webTestClient;
 
@@ -80,5 +80,31 @@ public class UserControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody(String.class)
                 .isEqualTo("Invalid credentials");
+    }
+
+    @Test
+    void testDeleteUserSuccess() {
+        when(userService.deleteUser(any(UserModel.class))).thenReturn(Mono.empty());
+
+        webTestClient.post()
+                .uri("/api/auth/delete")
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .isEqualTo("User deleted successfully");
+    }
+
+    @Test
+    void testDeleteUserFailure() {
+        when(userService.deleteUser(any(UserModel.class))).thenReturn(Mono.error(new AuthException("User does not exist")));
+
+        webTestClient.post()
+                .uri("/api/auth/delete")
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(String.class)
+                .isEqualTo("User does not exist");
     }
 }
