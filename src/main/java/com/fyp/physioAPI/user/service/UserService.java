@@ -6,7 +6,11 @@ import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    Mono<Void> validateUser(UserModel user) throws AuthException;
+    Mono<Void> validateUser(String email, String password) throws AuthException;
 
     Mono<Void> registerUser(UserModel user) throws AuthException;
+
+    Mono<Void> deleteUser(UserModel user) throws AuthException;
+
+    Mono<Void> updateUser(UserModel user) throws AuthException;
 }

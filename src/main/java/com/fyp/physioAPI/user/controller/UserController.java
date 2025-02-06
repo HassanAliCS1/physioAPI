@@ -17,18 +17,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/auth")
 public class UserController {
 
-    //TODO: function   -- purpose      -- service level logic
-    //TODO: Login      -- (Read)      -> check DB
-    //TODO: Signup     --(Create)     -> if conditions are met add to DB
-    //TODO: UpdateInfo -- (Update)    -> if conditions are met Update
-    //TODO: Delete     -- (Delete)    -> If conditions are met Delete
-
     private final UserService svc;
 
     @PostMapping("/signup")
     public Mono<ResponseEntity<String>> register(@RequestBody Mono<UserModel> user) {
         return user
-                .flatMap(u -> svc.registerUser(u))
+                .flatMap(svc::registerUser)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully")))
                 .onErrorResume(AuthException.class,
                         e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage())));
@@ -37,11 +31,29 @@ public class UserController {
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> authenticate(@RequestBody Mono<UserModel> user) {
         return user
-                .flatMap(u -> svc.validateUser(u))
+                .flatMap(u -> svc.validateUser(u.getEmail(),u.getPassword()))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK).body("User Logged in successfully")))
                 .onErrorResume(AuthException.class,
                         e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage())));
 
+    }
+
+    @PostMapping("/update")
+    public Mono<ResponseEntity<String>> updateUser(@RequestBody Mono<UserModel> user) {
+        return user
+                .flatMap(svc::updateUser)
+                .then(Mono.just(ResponseEntity.status(HttpStatus.OK).body("User updated successfully")))
+                .onErrorResume(AuthException.class,
+                        e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage())));
+    }
+
+    @PostMapping("/delete")
+    public Mono<ResponseEntity<String>> deleteUser(@RequestBody Mono<UserModel> user) {
+        return user
+                .flatMap(svc::deleteUser)
+                .then(Mono.just(ResponseEntity.status(HttpStatus.OK).body("User deleted successfully")))
+                .onErrorResume(AuthException.class,
+                        e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage())));
     }
 
 

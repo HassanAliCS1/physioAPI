@@ -41,7 +41,8 @@ jacocoTestReport {
 
 sonar {
 	properties {
-		property "sonar.projectKey", ${SONAR_PROJECT_KEY}
+		property "sonar.projectKey", 'HassanAliCS1_physioAPI'
+		property "sonar.login", System.getenv("SONAR_TOKEN")
 		property 'sonar.projectName', 'physioAPI'
 		property "sonar.organization", "hassanalics1"
 		property "sonar.host.url", "https://sonarcloud.io"

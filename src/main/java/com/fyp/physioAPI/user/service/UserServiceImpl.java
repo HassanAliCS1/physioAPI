@@ -15,14 +15,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public Mono<Void> validateUser(UserModel user) throws AuthException {
+    public Mono<Void> validateUser(String email, String password) throws AuthException {
+
+        var optionalUser = userRepository.findByEmail(email).orElseThrow(() -> new AuthException("User not found"));
+
         return Mono.fromRunnable(() -> {
-            userRepository
-                    .findByEmailAndPassword(user.getEmail(), user.getPassword())
-                    .orElseThrow(() -> new AuthException("Email or password is incorrect"));
+            if(!optionalUser.getPassword().equals(password)) {
+                throw new AuthException("Email or password is incorrect");
+            }
         });
-
-
     }
 
     @Override
@@ -36,4 +37,27 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         });
     }
+
+    @Override
+    public Mono<Void> deleteUser(UserModel user) throws AuthException {
+        var existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new AuthException("User not found with ID: " + user.getId()));
+
+        return Mono.fromRunnable(() -> userRepository.delete(existingUser));
+    }
+
+    @Override
+    public Mono<Void> updateUser(UserModel user) throws AuthException {
+
+        var existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new AuthException("User not found with ID: " + user.getId()));
+
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+
+        return Mono.fromRunnable(() -> userRepository.save(existingUser));
+    }
+
 }
